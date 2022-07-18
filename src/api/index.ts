@@ -1,11 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Trace } from "@/tool/Tool";
+import { BinanceApi } from "@/api/binance";
 
 export class BaseApi {
   async request<T = any>(
     path: string,
     method: "get" | "post" | "put" | "delete",
-    data: never,
+    data: any,
     config: any = {
       headers: {},
     }
@@ -49,6 +50,10 @@ export class BaseApi {
           reject(msg);
         });
     });
+  }
+
+  getBinanceApi() {
+    return new BinanceApi(this);
   }
 }
 
