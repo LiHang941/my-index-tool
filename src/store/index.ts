@@ -10,7 +10,7 @@ export default createStore({
     token0: "BTC",
     token1: "USDT",
     interval: "1d",
-    deductionCount: 0,
+    deductionCount: 300,
   },
   getters: {},
   mutations: {

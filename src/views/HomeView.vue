@@ -2,18 +2,21 @@
   <div class="common-layout">
     <el-container>
       <el-header>
-        <h1>均线推演工具</h1>
+        <div class="flex align-center justify-center">
+          <h1>均线推演工具</h1>
+          <span style="margin-left: 10px">(数据来源Binance API)</span>
+        </div>
       </el-header>
       <el-main>
         <el-form label-width="120px" label-position="left">
           <el-form-item label="交易对">
-            <el-col :span="11">
+            <el-col :span="3">
               <el-input v-model="token0" placeholder="币0" />
             </el-col>
-            <el-col :span="2" class="text-center">
+            <el-col :span="1" class="text-center">
               <span class="text-gray-500">-</span>
             </el-col>
-            <el-col :span="11">
+            <el-col :span="3">
               <el-input v-model="token1" placeholder="币1" />
             </el-col>
           </el-form-item>
