@@ -2,12 +2,19 @@
   <div class="common-layout">
     <el-container>
       <el-header>
-        <div class="flex align-center justify-center">
-          <h1>均线推演工具</h1>
-          <span style="margin-left: 10px">(数据来源Binance API)</span>
-        </div>
+        <el-divider content-position="left"><h1>均线推演工具</h1></el-divider>
       </el-header>
       <el-main>
+        <div class="faq flex flex-direction align-start">
+          <h5>1.MA均线有助于形成趋势，从而形成正反馈</h5>
+          <h5>
+            2.MA均线是不灵敏的，可以通过推演的方式，来查看均线的走向，从而预测大盘的走向
+          </h5>
+          <h5>3.推演的作用，如果当前收盘价横盘，预测后期的均线走向</h5>
+          <p style="color: red">本工具纯粹交流，不构成任何投资建议</p>
+        </div>
+        <el-divider border-style="double" />
+
         <el-form label-width="120px" label-position="left">
           <el-form-item label="交易对">
             <el-col :span="3">
@@ -199,10 +206,17 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="less">
 .k-line-chart {
   height: 600px;
   width: 100%;
   min-width: 1200px;
+}
+.faq {
+  > h5 {
+    line-height: 30px;
+    height: 30px;
+    margin: 0;
+  }
 }
 </style>
