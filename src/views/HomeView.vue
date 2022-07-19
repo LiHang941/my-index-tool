@@ -85,7 +85,7 @@ import { UPDATE_QUERY } from "@/store/mutation-types";
 
 export default {
   name: "HomeView",
-  data: function () {
+  data() {
     return {
       token0: this.$store.state.token0,
       token1: this.$store.state.token1,
@@ -95,9 +95,47 @@ export default {
       subTechnicalIndicatorTypes: ["VOL", "MACD", "KDJ"],
     };
   },
-  mounted: function () {
+  mounted() {
     this.kLineChart = init("technical-indicator-k-line");
     this.kLineChart.setPriceVolumePrecision(6, 6);
+    this.kLineChart.addTechnicalIndicatorTemplate({
+      name: "MA",
+      shortName: "MA",
+      series: "price",
+      calcParams: [5, 10, 30, 60, 90, 120, 200],
+      precision: 2,
+      shouldCheckParamCount: false,
+      shouldOhlc: true,
+      plots: [
+        { key: "ma5", title: "MA5: ", type: "line" },
+        { key: "ma10", title: "MA10: ", type: "line" },
+        { key: "ma30", title: "MA30: ", type: "line" },
+        { key: "ma60", title: "MA60: ", type: "line" },
+        { key: "ma90", title: "MA90: ", type: "line" },
+        { key: "ma120", title: "MA120: ", type: "line" },
+        { key: "ma200", title: "MA200: ", type: "line" },
+      ],
+      regeneratePlots: (params) => {
+        return params.map((p) => {
+          return { key: `ma${p}`, title: `MA${p}: `, type: "line" };
+        });
+      },
+      calcTechnicalIndicator: (dataList, { params, plots }) => {
+        const closeSums = [];
+        return dataList.map((kLineData, i) => {
+          const ma = {};
+          const close = kLineData.close;
+          params.forEach((p, index) => {
+            closeSums[index] = (closeSums[index] || 0) + close;
+            if (i >= p - 1) {
+              ma[plots[index].key] = closeSums[index] / p;
+              closeSums[index] -= dataList[i - (p - 1)].close;
+            }
+          });
+          return ma;
+        });
+      },
+    });
     this.paneId = this.kLineChart.createTechnicalIndicator("VOL", false);
     this.initData();
   },
@@ -137,22 +175,23 @@ export default {
 
         Trace.print("SHOW", res);
         this.kLineChart.applyNewData(res);
+        this.setCandleTechnicalIndicator("MA");
       } finally {
         loading.close();
       }
     },
-    setCandleTechnicalIndicator: function (type) {
+    setCandleTechnicalIndicator(type) {
       this.kLineChart.createTechnicalIndicator(type, false, {
         id: "candle_pane",
       });
     },
-    setSubTechnicalIndicator: function (type) {
+    setSubTechnicalIndicator(type) {
       this.kLineChart.createTechnicalIndicator(type, false, {
         id: this.paneId,
       });
     },
   },
-  unmounted: function () {
+  unmounted() {
     dispose("technical-indicator-k-line");
   },
 };
